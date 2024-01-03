@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>form</title>
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <label for="fnm">fname</label>
+        <input type="text" id="fnm" name="fnm" placeholder="Enter Your Name">
+        <br>
+        <br>
+        <label for="pwd">password</label>
+        <input type="password" id="pwd" name="pwd">
+        <br>
+        <br>
+        <br>
+        <br>
+        <button id="btn" type="submit" onclick="myfunction()">submit</button>
+    </div>
+    <br>
+    <br>
+    <table id="demo">
+        <tr>
+            <th>fname</th>
+            <th>password</th>
+            <th>Delete</th>
+            <th>Edite</th>
+            <th>SelectAll <input type="checkbox" id="check_all" name="chk" value="Select All" onclick="selects()" />
+
+            </th>
+        </tr>
+
+        <tbody>
+            <!-- <tr> 
+               <td></td>
+               <td></td>
+               <td></td>
+               <td>
+                    <button class="edit-button" onclick="editRow(this)">Edit</button>
+                    <button class="update-button" onclick="updateRow(this)" style="display: none;">Update</button>
+                    <button class="cancel-button" onclick="cancelEdit(this)" style="display: none;">Cancel</button>
+                </td>
+          
+            </tr> -->
+        </tbody>
+    </table>
+
+    <script>
+        function myfunction() {
+
+            let fname = document.getElementById("fnm").value;
+            let pass = document.getElementById("pwd").value;
+            let array1 = [fname, pass];
+            console.log("array1", array1);
+
+            var table = document.getElementById("demo"),
+                row = table.insertRow(),
+                cell,
+                perrow = 2,
+                cells = 0;
+            array1.map((value, i) => {
+                cell = row.insertCell();
+                cell.innerHTML = value;
+                cells++;
+                if (cells % perrow == 0 && cells != array1.length) { row = table.insertRow(); }
+                if (cells == 2) {
+                    cell = row.insertCell();
+                    cell.innerHTML = '<button  onclick="remove(this)">Delete</button> ';
+                }
+
+                // if (cells == 2) {
+                //     cell = row.insertCell();
+                //     cell.innerHTML = '<button  onclick="edite(this)">Edite</button> ';
+                // }
+                if (cells == 2) {
+                    cell = row.insertCell();
+                    cell.innerHTML = ' <button class="edit-button" onclick="editRow(this)">Edit</button><button class="update-button" onclick="updateRow(this)" style="display: none;">Update</button> <button class="cancel-button" onclick="cancelEdit(this)" style="display: none;">Cancel</button>';
+                }
+                if (cells == 2) {
+                    cell = row.insertCell();
+                    cell.innerHTML = '<input type="checkbox" id="chak2" name="chk" class="check">';
+                }
+
+            });
+        };
+
+        function remove(r) {
+            var i = r.parentNode.parentNode.rowIndex;
+            document.getElementById('demo').deleteRow(i);
+        };
+        function edite(button) {
+            let i = button.parentNode.parentNode;
+            // Get the cells within the row 
+            let fnameCell = i.cells[0];
+            let passwordCell = i.cells[1];
+            fnameCell.innerHTML = fnameInput;
+            passwordCell.innerHTML = passordInput;
+            document.getElementById('demo').editeRow(i);
+        }
+
+        function selects() {
+
+
+            let checkAll = document.getElementById('check_all');
+            let otherCheckboxes = document.querySelectorAll('input[type=checkbox]:not(#check_all)')
+
+            checkAll.addEventListener('change', onCheckAllChange)
+            otherCheckboxes.forEach(input => input.addEventListener('change', onOtherCheckboxChange))
+
+            function onCheckAllChange() {
+                otherCheckboxes.forEach((input) => input.checked = checkAll.checked)
+            }
+
+            function onOtherCheckboxChange() {
+                let allChecked = Array.from(otherCheckboxes).every(input => input.checked);
+                checkAll.checked = allChecked;
+            }
+        }
+        function editRow(button) {
+    var row = button.parentNode.parentNode;
+
+    // Store the original data in data attributes
+    row.setAttribute('data-original-name', row.cells[0].innerHTML);
+    row.setAttribute('data-original-email', row.cells[1].innerHTML);
+
+    // Replace cell content with input fields
+    row.cells[0].innerHTML = '<input type="text" value="' + row.getAttribute('data-original-name') + '">';
+    row.cells[1].innerHTML = '<input type="text" value="' + row.getAttribute('data-original-email') + '">';
+
+    // Toggle button visibility
+    button.style.display = 'none';
+    row.querySelector('.update-button').style.display = 'inline-block';
+    row.querySelector('.cancel-button').style.display = 'inline-block';
+  }
+
+  function updateRow(button) {
+    var row = button.parentNode.parentNode;
+
+    // Get the updated data from input fields
+    var newName = row.cells[0].querySelector('input').value;
+    var newEmail = row.cells[1].querySelector('input').value;
+
+    // Update cell content with new data
+    row.cells[0].innerHTML = newName;
+    row.cells[1].innerHTML = newEmail;
+
+    // Toggle button visibility
+    row.querySelector('.edit-button').style.display = 'inline-block';
+    button.style.display = 'none';
+    row.querySelector('.cancel-button').style.display = 'none';
+  }
+
+  function cancelEdit(button) {
+    var row = button.parentNode.parentNode;
+
+    // Restore original data from data attributes
+    row.cells[0].innerHTML = row.getAttribute('data-original-name');
+    row.cells[1].innerHTML = row.getAttribute('data-original-email');
+
+    // Toggle button visibility
+    row.querySelector('.edit-button').style.display = 'inline-block';
+    row.querySelector('.update-button').style.display = 'none';
+    button.style.display = 'none';
+  }
+    </script>
+
+</body>
+
+</html>
